@@ -60,6 +60,19 @@ def main() -> None:
                 configured.add(value)
             sources.append(f"config:{path}")
 
+    # The model cache is a host capability/catalog hint, not proof of current access.
+    cache_path = Path.home() / ".codex" / "models_cache.json"
+    if cache_path.is_file():
+        try:
+            cache = json.loads(cache_path.read_text(encoding="utf-8"))
+            for item in cache.get("models", []):
+                slug = item.get("slug")
+                if isinstance(slug, str) and slug.strip():
+                    configured.add(slug.strip())
+            sources.append(f"model-cache:{cache_path}")
+        except (OSError, json.JSONDecodeError, AttributeError):
+            pass
+
     result: dict[str, Any] = {
         "current_model": current or "unknown",
         "known_supported_models": sorted(configured),
