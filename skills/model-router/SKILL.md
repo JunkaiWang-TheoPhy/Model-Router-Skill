@@ -7,6 +7,15 @@ description: Infer the user's task intent from conversation and workspace contex
 
 Select the least expensive model that is likely to satisfy the actual task, switching models when ambiguity, risk, or reasoning depth makes another fit more appropriate. This skill is a routing aid: it may recommend a model for the current response or set an explicit model when creating/delegating a Codex task, but it cannot change the model already running the current turn.
 
+## Runtime model discovery
+
+Before recommending a route, identify two separate facts:
+
+1. **Current model** — use the model identifier exposed by the current system/app turn, if present. If it is not exposed, report `unknown`; never infer it from the requested reasoning effort or from a model name mentioned in the conversation.
+2. **Known supported models** — inspect the current host's advertised model capabilities first, then non-secret local configuration and environment metadata. The bundled helper `scripts/detect_runtime.py` performs a conservative scan and emits JSON without printing tokens or private prompt content.
+
+Treat a configured model as *available in configuration*, not proof that the account or current host can invoke it. Treat an API model-list response as account/API availability, not proof that the Codex app exposes the same model. Record the source and timestamp for every discovered item.
+
 ## 1. Build a minimal task profile
 
 Read only context needed for routing:
