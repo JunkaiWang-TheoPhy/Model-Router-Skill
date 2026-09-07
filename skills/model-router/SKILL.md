@@ -16,6 +16,8 @@ Before recommending a route, identify two separate facts:
 
 Treat a configured model as *available in configuration*, not proof that the account or current host can invoke it. Treat an API model-list response as account/API availability, not proof that the Codex app exposes the same model. Record the source and timestamp for every discovered item.
 
+Never recommend a provider family by itself as if it were an executable model. A recommendation must include a concrete `model_id` and supported reasoning effort. If only a family name is known, label it `version unknown / not executable` and do not attach an effort or fit score.
+
 ## 1. Build a minimal task profile
 
 Read only context needed for routing:
