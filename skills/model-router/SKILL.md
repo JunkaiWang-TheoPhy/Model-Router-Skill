@@ -61,7 +61,7 @@ Reasoning-effort labels map directly to the host capability (`light` → `low`, 
 
 ## 4. Response style and contract
 
-Default to a natural, human-readable answer. Unless the user explicitly asks for one model, always give at least two viable candidates, each with a recommendation percentage whose total is 100%. Percentages are comparative routing weights based on task fit and available evidence, not measured probabilities. Explain the tradeoff conversationally rather than exposing a rigid template.
+Default to a natural, human-readable answer. Unless the user explicitly asks for one model, always give at least two viable candidates, each with an independent fit score from 0% to 100%. Scores do not need to add up to 100%; multiple models may each score 100% when they fit different aspects of the task. Displayed candidates must differ by at least 5 percentage points. If the evidence is nearly tied, use a secondary task-fit factor such as cost, latency, tool support, or verification burden to make the decision margin explicit. Scores are evidence-based judgments of task fit, not measured probabilities. Explain the tradeoff conversationally rather than exposing a rigid template.
 
 Mention the main reason, the likely upgrade trigger, and any meaningful uncertainty in one or two short paragraphs. Keep the tone conversational and decisive, not bureaucratic. Do not mention hidden workspace details merely to make the answer sound analytical.
 
@@ -77,7 +77,7 @@ Fallback: <nearest alternative and trigger>
 Action: <recommend current reply, or specify delegated-task override>
 ```
 
-When using the structured format, include `Candidates: <model / effort — percentage>` with at least two entries unless the user explicitly requested a single model. Percentages must sum to 100% after rounding.
+When using the structured format, include `Candidates: <model / effort — fit: percentage>` with at least two entries unless the user explicitly requested a single model. Each fit score must be between 0% and 100%; scores are independent and must not be normalized or summed. Ensure every displayed pair differs by at least 5 percentage points.
 
 Use `Confidence: low` when intent or environment evidence is incomplete. Distinguish observed facts from inference, and never expose credentials, private content, or irrelevant workspace details merely to justify a route.
 
